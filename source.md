@@ -19,7 +19,7 @@ Instructions:
 ### Setup Step 2
 1. Link extraction
 
-Links are in <a> scope with "flex flex-col font-barlow gap-y-5 min-w-[280px] w-[280px] bg-transparent " class
+Links are in \<a\> scope with "flex flex-col font-barlow gap-y-5 min-w-[280px] w-[280px] bg-transparent " class
 
 2. Scraping approach
 
@@ -58,20 +58,20 @@ Now, it's time to add new scrappers:
 
 - BBC
 Target URL: https://www.bbc.com/turkce
-Parents: <div> scope, class: promo-text
-Links: <a> scope, class: "css-1i4ie53 eq53xv90"
-Titles: <h3> scope, class: css-kiiel0 ez3pb4d0 || <h3> scope, class: css-g0mr8l ez3pb4d0
+Parents: \<div\> scope, class: promo-text
+Links: \<a\> scope, class: "css-1i4ie53 eq53xv90"
+Titles: \<h3\> scope, class: css-kiiel0 ez3pb4d0 || \<h3\> scope, class: css-g0mr8l ez3pb4d0
 
 - Independent
 Target URL: https://www.indyturk.com
-Title: <div> scope, class: article-item-title
-Links: In the same scope as title, <a> scope (If multiple a scopes exists, ignore and log an error)
+Title: \<div\> scope, class: article-item-title
+Links: In the same scope as title, \<a\> scope (If multiple a scopes exists, ignore and log an error)
 
 - Euronews
 Target URL: https://tr.euronews.com/son-haberler
-Parent: <li> scope, class: tc-justin-timeline__item
-Title: In <h2> scope, class: tc-justin-timeline__article__title
-Links: <a> scope, class: tc-justin-timeline__article__link
+Parent: \<li\> scope, class: tc-justin-timeline__item
+Title: In \<h2\> scope, class: tc-justin-timeline__article__title
+Links: \<a\> scope, class: tc-justin-timeline__article__link
 
 ### JavaScript Fix for Euronews Page
 Log: [2026-04-23 13:15:00] Data scrapped from https://tr.euronews.com/son-haberler. 0 articles has found. Saved into data\euronews_tr.json.
