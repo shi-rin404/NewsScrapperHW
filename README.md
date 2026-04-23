@@ -158,3 +158,6 @@ ENGINES = [
 ```
 
 No other changes needed — scheduling, logging, and JSON rotation are handled automatically.
+
+## Project Source
+You can find the source we used to make this project by clicking [HERE](https://github.com/shi-rin404/NewsScrapperHW/blob/main/source.md).

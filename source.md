@@ -22,12 +22,15 @@ Instructions:
 Links are in <a> scope with "flex flex-col font-barlow gap-y-5 min-w-[280px] w-[280px] bg-transparent " class
 
 2. Scraping approach
+
 Use playwright, because this would be a team project for a class. I need to have less conflict.
 
 3. JSON file behavior
+
 Append new results with 10 times history top-limit
 
 4. Scheduler
+
 Use a Python-internal scheduler (e.g., schedule or APScheduler)
 
 ### Logger and Error Handling
@@ -44,8 +47,10 @@ And also can log swallowed errors into the log.txt, and kill the process with co
 
 ### Multiple Sources - Part 1
 ...
+
 2. Multiple sources — this directly affects your grade
 So, we need to prepare custom engines for every source. Please make a clean categorize logic for source engines. I will add new sources in the next prompt.
+
 ...
 
 ### Multiple Sources - Part 2
