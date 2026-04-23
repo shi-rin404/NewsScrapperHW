@@ -59,6 +59,7 @@ Now, it's time to add new scrappers:
 - BBC
 
 Target URL: https://www.bbc.com/turkce
+
 Parents: \<div\> scope, class: promo-text
 
 Links: \<a\> scope, class: "css-1i4ie53 eq53xv90"
