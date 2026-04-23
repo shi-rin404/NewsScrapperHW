@@ -1,44 +1,48 @@
-"""Registers and drives the periodic scraping job."""
+"""Registers and drives the periodic scraping job across all engines."""
 
 import logging
 import time
 
 import schedule
 
-from config import SCRAPE_INTERVAL_MINUTES, TARGET_URL, OUTPUT_FILE
+from config import SCRAPE_INTERVAL_MINUTES
 from exceptions import CriticalScraperError
 from logger.file_logger import create_run_logger
-from scrapers.bundle_scraper import scrape_articles
+from scrapers.registry import ENGINES
 from storage.json_store import append_run
 
 logger = logging.getLogger(__name__)
 
 
 def _run_scrape_job() -> None:
-    """Executes one full scrape-and-store cycle."""
-    run_log = create_run_logger()
-    logger.info("Scrape job started.")
+    """
+    Runs every registered engine once and writes results to their respective JSON files.
 
-    try:
-        articles = scrape_articles()
-        append_run(articles)
-        run_log.log_success(TARGET_URL, len(articles), OUTPUT_FILE)
-        logger.info(f"Scraped {len(articles)} articles.")
-    except CriticalScraperError as e:
-        # Unrecoverable — log to file and exit with the appropriate code.
-        logger.critical(str(e))
-        run_log.log_critical(str(e), e.exit_code)
-    except Exception as e:
-        # Non-fatal — record the error and let the scheduler continue.
-        logger.exception("Scrape job failed.")
-        run_log.log_error(str(e))
+    One log file is created per scheduler tick and shared across all engines in that tick.
+    A CriticalScraperError from any engine terminates the process immediately.
+    Any other exception is logged and the remaining engines continue normally.
+    """
+    run_log = create_run_logger()
+    logger.info(f"Scrape job started — {len(ENGINES)} engine(s) registered.")
+
+    for engine in ENGINES:
+        try:
+            articles = engine.scrape()
+            output_path = append_run(engine.name, articles)
+            run_log.log_success(engine.url, len(articles), output_path)
+            logger.info(f"[{engine.name}] Scraped {len(articles)} articles.")
+        except CriticalScraperError as e:
+            logger.critical(str(e))
+            run_log.log_critical(str(e), e.exit_code)  # calls sys.exit()
+        except Exception as e:
+            logger.exception(f"[{engine.name}] Scrape failed.")
+            run_log.log_error(f"[{engine.name}] {e}")
 
 
 def start() -> None:
-    """Runs the scraper once immediately, then repeats it every SCRAPE_INTERVAL_MINUTES minutes."""
+    """Runs all engines once immediately, then repeats every SCRAPE_INTERVAL_MINUTES minutes."""
     logger.info(f"Scheduler initialised — interval: every {SCRAPE_INTERVAL_MINUTES} minute(s).")
 
-    # Fire immediately so there is data from the moment the process starts.
     _run_scrape_job()
 
     schedule.every(SCRAPE_INTERVAL_MINUTES).minutes.do(_run_scrape_job)
