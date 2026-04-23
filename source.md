@@ -60,20 +60,27 @@ Now, it's time to add new scrappers:
 
 Target URL: https://www.bbc.com/turkce
 Parents: \<div\> scope, class: promo-text
+
 Links: \<a\> scope, class: "css-1i4ie53 eq53xv90"
+
 Titles: \<h3\> scope, class: css-kiiel0 ez3pb4d0 || \<h3\> scope, class: css-g0mr8l ez3pb4d0
 
 - Independent
 
 Target URL: https://www.indyturk.com
+
 Title: \<div\> scope, class: article-item-title
+
 Links: In the same scope as title, \<a\> scope (If multiple a scopes exists, ignore and log an error)
 
 - Euronews
 
 Target URL: https://tr.euronews.com/son-haberler
+
 Parent: \<li\> scope, class: tc-justin-timeline__item
+
 Title: In \<h2\> scope, class: tc-justin-timeline__article__title
+
 Links: \<a\> scope, class: tc-justin-timeline__article__link
 
 ### JavaScript Fix for Euronews Page
