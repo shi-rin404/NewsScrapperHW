@@ -2,3 +2,5 @@ playwright==1.44.0
 beautifulsoup4==4.12.3
 schedule==1.2.2
 requests==2.32.3
+elasticsearch>=8,<9
+python-dotenv
