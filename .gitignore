@@ -1,0 +1,10 @@
+# Runtime output (generated at runtime)
+data/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
