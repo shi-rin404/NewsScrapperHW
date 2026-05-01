@@ -1,1 +1,1 @@
-"""Elasticsearch indexing helpers for student 2 tasks."""
+"""Redis indexing helpers for student 2 tasks."""

@@ -6,15 +6,15 @@ import os
 
 from dotenv import load_dotenv
 
-from indexing.elasticsearch_indexer import NewsElasticsearchIndexer
+from indexing.redis_indexer import NewsRedisIndexer
 from processing.article_loader import load_all_articles, print_sample_records
 
 
 def main() -> None:
     load_dotenv()
     data_dir = os.getenv("DATA_DIR", "data")
-    elastic_url = os.getenv("ELASTICSEARCH_URL", "http://localhost:9200")
-    index_name = os.getenv("ELASTICSEARCH_INDEX", "news_articles")
+    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    index_name = os.getenv("REDIS_KEY_PREFIX", "news_articles")
 
     try:
         articles = load_all_articles(data_dir)
@@ -26,17 +26,17 @@ def main() -> None:
     print_sample_records(articles, limit=5)
 
     try:
-        indexer = NewsElasticsearchIndexer(url=elastic_url, index_name=index_name)
+        indexer = NewsRedisIndexer(url=redis_url, key_prefix=index_name)
         indexer.create_index()
         indexed_count = indexer.index_articles(articles)
 
         print(f"Indexed article count: {indexed_count}")
-        print(f"Elasticsearch document count: {indexer.count_documents()}")
+        print(f"Redis document count: {indexer.count_documents()}")
 
         for item in indexer.verify_sample(limit=5):
             print(item)
     except Exception as exc:
-        print(f"[ERROR] Elasticsearch operation failed: {exc}")
+        print(f"[ERROR] Redis operation failed: {exc}")
 
 
 if __name__ == "__main__":

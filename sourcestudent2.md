@@ -22,24 +22,24 @@ The `data` folder is now created automatically. What should I do next for Studen
 ### Docker Engine Error
 `failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine`
 
-### Elasticsearch Verification Output
+### Redis Verification Output
 `python student2_demo.py`
 `Loaded article count: 247`
 `Indexed article count: 247`
-`Elasticsearch document count: 247`
+`Redis document count: 247`
 
 ### Student 2 Requirements File Request
 Please create a dedicated requirements file for Student 2.
 
 ## Student 2 Specification (from Yapılacaklar.md)
 ### Goal
-Load JSON outputs produced by the scraper, normalize them into a flat record structure, print 5 sample records, and index articles into Elasticsearch for scalable search and storage.
+Load JSON outputs produced by the scraper, normalize them into a flat record structure, print 5 sample records, and index articles into Redis for scalable search and storage.
 
 ### Required New Files
 - `processing/__init__.py`
 - `processing/article_loader.py`
 - `indexing/__init__.py`
-- `indexing/elasticsearch_indexer.py`
+- `indexing/redis_indexer.py`
 - `student2_demo.py`
 - `.env.example`
 
@@ -69,32 +69,32 @@ Load JSON outputs produced by the scraper, normalize them into a flat record str
 - Skip entries with empty `text` or `url`.
 - Print first 5 records when available.
 
-### Required Class in `indexing/elasticsearch_indexer.py`
-- `class NewsElasticsearchIndexer`
+### Required Class in `indexing/redis_indexer.py`
+- `class NewsRedisIndexer`
   - `__init__(url: str = "http://localhost:9200", index_name: str = "news_articles")`
   - `create_index() -> None`
   - `index_articles(articles: list[dict]) -> int`
   - `count_documents() -> int`
   - `verify_sample(limit: int = 5) -> list[dict]`
 
-### Elasticsearch Index and Mapping
-- Index name: `news_articles`
+### Redis Key Structure
+- Key prefix: `news_articles`
 - Fields:
-  - `source` (`keyword`)
-  - `url` (`keyword`)
-  - `text` (`text`)
-  - `scraped_at` (`date`)
+  - `source` (`string`)
+  - `url` (`string`)
+  - `text` (`string`)
+  - `scraped_at` (`ISO datetime string`)
   - `run_index` (`integer`)
   - `article_index` (`integer`)
-  - `indexed_at` (`date`)
+  - `indexed_at` (`ISO datetime string`)
 
 ### Demo Flow (`student2_demo.py`)
 1. Load JSON files from `data`.
 2. Print total loaded article count.
 3. Print 5 sample records.
-4. Create Elasticsearch index.
+4. Prepare Redis key namespace.
 5. Bulk index article records.
-6. Compare loaded count and Elasticsearch document count.
+6. Compare loaded count and Redis document count.
 7. Print 5 indexed sample documents.
 
 ### Acceptance Criteria
@@ -102,15 +102,15 @@ Load JSON outputs produced by the scraper, normalize them into a flat record str
 - `data/*.json` is loaded successfully.
 - At least 5 sample records are printed.
 - `news_articles` index is created.
-- Articles are indexed into Elasticsearch.
+- Articles are indexed into Redis.
 - Re-running does not create duplicate documents.
-- Loaded count and Elasticsearch count are consistent.
+- Loaded count and Redis count are consistent.
 
 ## Student 2 Deliverables
 - Added `processing/article_loader.py`
-- Added `indexing/elasticsearch_indexer.py`
+- Added `indexing/redis_indexer.py`
 - Added `student2_demo.py`
 - Added `.env.example`
 - Added `requirements.student2.txt`
-- Updated `requirements.txt` with `elasticsearch>=8,<9` and `python-dotenv`
-- Added refresh wait in bulk indexing for consistent Elasticsearch document counts
+- Updated `requirements.txt` with `redis` and `python-dotenv`
+- Added Redis-backed indexing verification in Student 2 demo
